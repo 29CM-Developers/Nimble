@@ -3,7 +3,12 @@
 /// `require` will return the result of the expression if the matcher passes, and throw an error if not.
 /// if a `customError` is given, then that will be thrown. Otherwise, a ``RequireError`` will be thrown.
 @discardableResult
-public func require<T>(file: FileString = #file, line: UInt = #line, customError: Error? = nil, _ expression: @autoclosure @escaping () throws -> T?) -> SyncRequirement<T> {
+public func require<T>(
+    file: FileString = #file,
+    line: UInt = #line,
+    customError: Error? = nil,
+    _ expression: @autoclosure @escaping () throws -> sending T?
+) -> SyncRequirement<T> {
     return SyncRequirement(
         expression: Expression(
             expression: expression,
@@ -17,7 +22,12 @@ public func require<T>(file: FileString = #file, line: UInt = #line, customError
 /// `require` will return the result of the expression if the matcher passes, and throw an error if not.
 /// if a `customError` is given, then that will be thrown. Otherwise, a ``RequireError`` will be thrown.
 @discardableResult
-public func require<T>(file: FileString = #file, line: UInt = #line, customError: Error? = nil, _ expression: @autoclosure () -> (() throws -> T)) -> SyncRequirement<T> {
+public func require<T>(
+    file: FileString = #file,
+    line: UInt = #line,
+    customError: Error? = nil,
+    _ expression: @autoclosure () -> sending (() throws -> sending T)
+) -> SyncRequirement<T> {
     return SyncRequirement(
         expression: Expression(
             expression: expression(),
@@ -31,7 +41,12 @@ public func require<T>(file: FileString = #file, line: UInt = #line, customError
 /// `require` will return the result of the expression if the matcher passes, and throw an error if not.
 /// if a `customError` is given, then that will be thrown. Otherwise, a ``RequireError`` will be thrown.
 @discardableResult
-public func require<T>(file: FileString = #file, line: UInt = #line, customError: Error? = nil, _ expression: @autoclosure () -> (() throws -> T?)) -> SyncRequirement<T> {
+public func require<T>(
+    file: FileString = #file,
+    line: UInt = #line,
+    customError: Error? = nil,
+    _ expression: @autoclosure () -> sending (() throws -> sending T?)
+) -> SyncRequirement<T> {
     return SyncRequirement(
         expression: Expression(
             expression: expression(),
@@ -45,7 +60,12 @@ public func require<T>(file: FileString = #file, line: UInt = #line, customError
 /// `require` will return the result of the expression if the matcher passes, and throw an error if not.
 /// if a `customError` is given, then that will be thrown. Otherwise, a ``RequireError`` will be thrown.
 @discardableResult
-public func require(file: FileString = #file, line: UInt = #line, customError: Error? = nil, _ expression: @autoclosure () -> (() throws -> Void)) -> SyncRequirement<Void> {
+public func require(
+    file: FileString = #file,
+    line: UInt = #line,
+    customError: Error? = nil,
+    _ expression: @autoclosure () -> sending (() throws -> sending Void)
+) -> SyncRequirement<Void> {
     return SyncRequirement(
         expression: Expression(
             expression: expression(),
@@ -61,7 +81,12 @@ public func require(file: FileString = #file, line: UInt = #line, customError: E
 ///
 /// This is provided as an alternative to ``require``, for when you want to be specific about whether you're using ``SyncRequirement`` or ``AsyncRequirement``.
 @discardableResult
-public func requires<T>(file: FileString = #file, line: UInt = #line, customError: Error? = nil, _ expression: @autoclosure @escaping () throws -> T?) -> SyncRequirement<T> {
+public func requires<T>(
+    file: FileString = #file,
+    line: UInt = #line,
+    customError: Error? = nil,
+    _ expression: @autoclosure @escaping () throws -> sending T?
+) -> SyncRequirement<T> {
     return SyncRequirement(
         expression: Expression(
             expression: expression,
@@ -77,7 +102,12 @@ public func requires<T>(file: FileString = #file, line: UInt = #line, customErro
 ///
 /// This is provided as an alternative to ``require``, for when you want to be specific about whether you're using ``SyncRequirement`` or ``AsyncRequirement``.
 @discardableResult
-public func requires<T>(file: FileString = #file, line: UInt = #line, customError: Error? = nil, _ expression: @autoclosure () -> (() throws -> T)) -> SyncRequirement<T> {
+public func requires<T>(
+    file: FileString = #file,
+    line: UInt = #line,
+    customError: Error? = nil,
+    _ expression: @autoclosure () -> sending (() throws -> sending T)
+) -> SyncRequirement<T> {
     return SyncRequirement(
         expression: Expression(
             expression: expression(),
@@ -93,7 +123,12 @@ public func requires<T>(file: FileString = #file, line: UInt = #line, customErro
 ///
 /// This is provided as an alternative to ``require``, for when you want to be specific about whether you're using ``SyncRequirement`` or ``AsyncRequirement``.
 @discardableResult
-public func requires<T>(file: FileString = #file, line: UInt = #line, customError: Error? = nil, _ expression: @autoclosure () -> (() throws -> T?)) -> SyncRequirement<T> {
+public func requires<T>(
+    file: FileString = #file,
+    line: UInt = #line,
+    customError: Error? = nil,
+    _ expression: @autoclosure () -> sending (() throws -> sending T?)
+) -> SyncRequirement<T> {
     return SyncRequirement(
         expression: Expression(
             expression: expression(),
@@ -109,7 +144,12 @@ public func requires<T>(file: FileString = #file, line: UInt = #line, customErro
 ///
 /// This is provided as an alternative to ``require``, for when you want to be specific about whether you're using ``SyncRequirement`` or ``AsyncRequirement``.
 @discardableResult
-public func requires(file: FileString = #file, line: UInt = #line, customError: Error? = nil, _ expression: @autoclosure () -> (() throws -> Void)) -> SyncRequirement<Void> {
+public func requires(
+    file: FileString = #file,
+    line: UInt = #line,
+    customError: Error? = nil,
+    _ expression: @autoclosure () -> sending (() throws -> sending Void)
+) -> SyncRequirement<Void> {
     return SyncRequirement(
         expression: Expression(
             expression: expression(),
@@ -216,7 +256,12 @@ public func requirea<T: Sendable>(file: FileString = #file, line: UInt = #line, 
 /// `unwrap` will return the result of the expression if it is non-nil, and throw an error if the value is nil.
 /// if a `customError` is given, then that will be thrown. Otherwise, a ``RequireError`` will be thrown.
 @discardableResult
-public func unwrap<T>(file: FileString = #file, line: UInt = #line, customError: Error? = nil, _ expression: @autoclosure @escaping () throws -> T?) throws -> T {
+public func unwrap<T>(
+    file: FileString = #file,
+    line: UInt = #line,
+    customError: Error? = nil,
+    _ expression: @autoclosure @escaping () throws -> sending T?
+) throws -> T {
     try requires(file: file, line: line, customError: customError, expression()).toNot(beNil())
 }
 
@@ -226,7 +271,12 @@ public func unwrap<T>(file: FileString = #file, line: UInt = #line, customError:
 /// `unwrap` will return the result of the expression if it is non-nil, and throw an error if the value is nil.
 /// if a `customError` is given, then that will be thrown. Otherwise, a ``RequireError`` will be thrown.
 @discardableResult
-public func unwrap<T>(file: FileString = #file, line: UInt = #line, customError: Error? = nil, _ expression: @autoclosure () -> (() throws -> T?)) throws -> T {
+public func unwrap<T>(
+    file: FileString = #file,
+    line: UInt = #line,
+    customError: Error? = nil,
+    _ expression: @autoclosure () -> sending (() throws -> sending T?)
+) throws -> T {
     try requires(file: file, line: line, customError: customError, expression()).toNot(beNil())
 }
 
@@ -236,7 +286,12 @@ public func unwrap<T>(file: FileString = #file, line: UInt = #line, customError:
 /// `unwraps` will return the result of the expression if it is non-nil, and throw an error if the value is nil.
 /// if a `customError` is given, then that will be thrown. Otherwise, a ``RequireError`` will be thrown.
 @discardableResult
-public func unwraps<T>(file: FileString = #file, line: UInt = #line, customError: Error? = nil, _ expression: @autoclosure @escaping () throws -> T?) throws -> T {
+public func unwraps<T>(
+    file: FileString = #file,
+    line: UInt = #line,
+    customError: Error? = nil,
+    _ expression: @autoclosure @escaping () throws -> sending T?
+) throws -> T {
     try requires(file: file, line: line, customError: customError, expression()).toNot(beNil())
 }
 
@@ -246,7 +301,12 @@ public func unwraps<T>(file: FileString = #file, line: UInt = #line, customError
 /// `unwraps` will return the result of the expression if it is non-nil, and throw an error if the value is nil.
 /// if a `customError` is given, then that will be thrown. Otherwise, a ``RequireError`` will be thrown.
 @discardableResult
-public func unwraps<T>(file: FileString = #file, line: UInt = #line, customError: Error? = nil, _ expression: @autoclosure () -> (() throws -> T?)) throws -> T {
+public func unwraps<T>(
+    file: FileString = #file,
+    line: UInt = #line,
+    customError: Error? = nil,
+    _ expression: @autoclosure () -> sending (() throws -> sending T?)
+) throws -> T {
     try requires(file: file, line: line, customError: customError, expression()).toNot(beNil())
 }
 
