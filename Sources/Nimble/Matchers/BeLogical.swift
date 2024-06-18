@@ -1,54 +1,54 @@
 import Foundation
 
-extension Int8: ExpressibleByBooleanLiteral {
+extension Int8: @retroactive ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: Bool) {
         self = NSNumber(value: value).int8Value
     }
 }
 
-extension UInt8: ExpressibleByBooleanLiteral {
+extension UInt8: @retroactive ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: Bool) {
         self = NSNumber(value: value).uint8Value
     }
 }
 
-extension Int16: ExpressibleByBooleanLiteral {
+extension Int16: @retroactive ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: Bool) {
         self = NSNumber(value: value).int16Value
     }
 }
 
-extension UInt16: ExpressibleByBooleanLiteral {
+extension UInt16: @retroactive ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: Bool) {
         self = NSNumber(value: value).uint16Value
     }
 }
 
-extension Int32: ExpressibleByBooleanLiteral {
+extension Int32: @retroactive ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: Bool) {
         self = NSNumber(value: value).int32Value
     }
 }
 
-extension UInt32: ExpressibleByBooleanLiteral {
+extension UInt32: @retroactive ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: Bool) {
         self = NSNumber(value: value).uint32Value
     }
 }
 
-extension Int64: ExpressibleByBooleanLiteral {
+extension Int64: @retroactive ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: Bool) {
         self = NSNumber(value: value).int64Value
     }
 }
 
-extension UInt64: ExpressibleByBooleanLiteral {
+extension UInt64: @retroactive ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: Bool) {
         self = NSNumber(value: value).uint64Value
     }
 }
 
-extension Float: ExpressibleByBooleanLiteral {
+extension Float: @retroactive ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: Bool) {
         self = NSNumber(value: value).floatValue
     }
