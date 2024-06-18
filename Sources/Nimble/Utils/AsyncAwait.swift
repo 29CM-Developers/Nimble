@@ -258,7 +258,7 @@ private func runAwaitTrigger<T>(
     timeoutInterval: NimbleTimeInterval,
     leeway: NimbleTimeInterval,
     file: FileString, line: UInt,
-    _ closure: @escaping @Sendable (@escaping @Sendable (T) -> Void) async throws -> Void
+    _ closure: @escaping (@escaping @Sendable (T) -> Void) async throws -> Void
 ) async -> AsyncPollResult<T> {
     let timeoutQueue = awaiter.timeoutQueue
     let completionCount = Box(value: 0)
@@ -309,7 +309,7 @@ internal func performBlock<T>(
     timeoutInterval: NimbleTimeInterval,
     leeway: NimbleTimeInterval,
     file: FileString, line: UInt,
-    _ closure: @escaping @Sendable (@escaping @Sendable (T) -> Void) async throws -> Void
+    _ closure: @escaping (@escaping @Sendable (T) -> Void) async throws -> Void
 ) async -> AsyncPollResult<T> {
     await runAwaitTrigger(
         awaiter: NimbleEnvironment.activeInstance.awaiter,

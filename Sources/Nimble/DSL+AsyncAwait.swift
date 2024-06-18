@@ -87,7 +87,7 @@ public func expecta(file: FileString = #file, line: UInt = #line, _ expression: 
 ///
 /// @warning
 /// Unlike the synchronous version of this call, this does not support catching Objective-C exceptions.
-public func waitUntil(timeout: NimbleTimeInterval = PollingDefaults.timeout, file: FileString = #file, line: UInt = #line, action: @escaping (@escaping () -> Void) async -> Void) async {
+public func waitUntil(timeout: NimbleTimeInterval = PollingDefaults.timeout, file: FileString = #file, line: UInt = #line, action: sending @escaping (@escaping @Sendable () -> Void) async -> Void) async {
     await throwableUntil(timeout: timeout) { done in
         await action(done)
     }
@@ -100,7 +100,7 @@ public func waitUntil(timeout: NimbleTimeInterval = PollingDefaults.timeout, fil
 ///
 /// @warning
 /// Unlike the synchronous version of this call, this does not support catching Objective-C exceptions.
-public func waitUntil(timeout: NimbleTimeInterval = PollingDefaults.timeout, file: FileString = #file, line: UInt = #line, action: @escaping (@escaping () -> Void) -> Void) async {
+public func waitUntil(timeout: NimbleTimeInterval = PollingDefaults.timeout, file: FileString = #file, line: UInt = #line, action: sending @escaping (@escaping @Sendable () -> Void) -> Void) async {
     await throwableUntil(timeout: timeout, file: file, line: line) { done in
         action(done)
     }
@@ -115,12 +115,12 @@ private func throwableUntil(
     timeout: NimbleTimeInterval,
     file: FileString = #file,
     line: UInt = #line,
-    action: @escaping (@escaping () -> Void) async throws -> Void) async {
+    action: sending @escaping (@escaping @Sendable () -> Void) async throws -> Void) async {
         let leeway = timeout.divided
         let result = await performBlock(
             timeoutInterval: timeout,
             leeway: leeway,
-            file: file, line: line) { @MainActor (done: @escaping (ErrorResult) -> Void) async throws -> Void in
+            file: file, line: line) { @MainActor (done: @escaping @Sendable (ErrorResult) -> Void) async throws -> Void in
                 do {
                     try await action {
                         done(.none)
