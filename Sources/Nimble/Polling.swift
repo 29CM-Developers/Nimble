@@ -37,8 +37,8 @@ public struct AsyncDefaults {
 public struct PollingDefaults: @unchecked Sendable {
     private static let lock = NSRecursiveLock()
 
-    private static var _timeout: NimbleTimeInterval = .seconds(1)
-    private static var _pollInterval: NimbleTimeInterval = .milliseconds(10)
+    nonisolated(unsafe) private static var _timeout: NimbleTimeInterval = .seconds(1)
+    nonisolated(unsafe) private static var _pollInterval: NimbleTimeInterval = .milliseconds(10)
 
     public static var timeout: NimbleTimeInterval {
         get {
@@ -95,8 +95,7 @@ internal func poll<T>(
         let result = pollBlock(
             pollInterval: poll,
             timeoutInterval: timeout,
-            file: actualExpression.location.file,
-            line: actualExpression.location.line,
+            sourceLocation: actualExpression.location,
             fnName: fnName) {
                 lastMatcherResult = try matcher.satisfies(uncachedExpression)
                 if lastMatcherResult!.toBoolean(expectation: style) {

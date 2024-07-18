@@ -7,7 +7,7 @@ public func require<T>(
     file: FileString = #file,
     line: UInt = #line,
     customError: Error? = nil,
-    _ expression: @autoclosure @escaping () throws -> sending T?
+    _ expression: @autoclosure @escaping @Sendable () throws -> sending T?
 ) -> SyncRequirement<T> {
     return SyncRequirement(
         expression: Expression(
@@ -26,7 +26,7 @@ public func require<T>(
     file: FileString = #file,
     line: UInt = #line,
     customError: Error? = nil,
-    _ expression: @autoclosure () -> sending (() throws -> sending T)
+    _ expression: @autoclosure () -> (@Sendable () throws -> sending T)
 ) -> SyncRequirement<T> {
     return SyncRequirement(
         expression: Expression(
@@ -45,7 +45,7 @@ public func require<T>(
     file: FileString = #file,
     line: UInt = #line,
     customError: Error? = nil,
-    _ expression: @autoclosure () -> sending (() throws -> sending T?)
+    _ expression: @autoclosure () -> (@Sendable () throws -> sending T?)
 ) -> SyncRequirement<T> {
     return SyncRequirement(
         expression: Expression(
@@ -64,7 +64,7 @@ public func require(
     file: FileString = #file,
     line: UInt = #line,
     customError: Error? = nil,
-    _ expression: @autoclosure () -> sending (() throws -> sending Void)
+    _ expression: @autoclosure () -> (@Sendable () throws -> Void)
 ) -> SyncRequirement<Void> {
     return SyncRequirement(
         expression: Expression(
@@ -85,7 +85,7 @@ public func requires<T>(
     file: FileString = #file,
     line: UInt = #line,
     customError: Error? = nil,
-    _ expression: @autoclosure @escaping () throws -> sending T?
+    _ expression: @autoclosure @escaping @Sendable () throws -> sending T?
 ) -> SyncRequirement<T> {
     return SyncRequirement(
         expression: Expression(
@@ -106,7 +106,7 @@ public func requires<T>(
     file: FileString = #file,
     line: UInt = #line,
     customError: Error? = nil,
-    _ expression: @autoclosure () -> sending (() throws -> sending T)
+    _ expression: @autoclosure () -> (@Sendable () throws -> sending T)
 ) -> SyncRequirement<T> {
     return SyncRequirement(
         expression: Expression(
@@ -127,7 +127,7 @@ public func requires<T>(
     file: FileString = #file,
     line: UInt = #line,
     customError: Error? = nil,
-    _ expression: @autoclosure () -> sending (() throws -> sending T?)
+    _ expression: @autoclosure () -> (@Sendable () throws -> sending T?)
 ) -> SyncRequirement<T> {
     return SyncRequirement(
         expression: Expression(
@@ -148,7 +148,7 @@ public func requires(
     file: FileString = #file,
     line: UInt = #line,
     customError: Error? = nil,
-    _ expression: @autoclosure () -> sending (() throws -> sending Void)
+    _ expression: @autoclosure () -> (@Sendable () throws -> sending Void)
 ) -> SyncRequirement<Void> {
     return SyncRequirement(
         expression: Expression(
@@ -260,7 +260,7 @@ public func unwrap<T>(
     file: FileString = #file,
     line: UInt = #line,
     customError: Error? = nil,
-    _ expression: @autoclosure @escaping () throws -> sending T?
+    _ expression: @autoclosure @escaping @Sendable () throws -> sending T?
 ) throws -> T {
     try requires(file: file, line: line, customError: customError, expression()).toNot(beNil())
 }
@@ -275,7 +275,7 @@ public func unwrap<T>(
     file: FileString = #file,
     line: UInt = #line,
     customError: Error? = nil,
-    _ expression: @autoclosure () -> sending (() throws -> sending T?)
+    _ expression: @autoclosure () -> (@Sendable () throws -> sending T?)
 ) throws -> T {
     try requires(file: file, line: line, customError: customError, expression()).toNot(beNil())
 }
@@ -290,7 +290,7 @@ public func unwraps<T>(
     file: FileString = #file,
     line: UInt = #line,
     customError: Error? = nil,
-    _ expression: @autoclosure @escaping () throws -> sending T?
+    _ expression: @autoclosure @escaping @Sendable () throws -> sending T?
 ) throws -> T {
     try requires(file: file, line: line, customError: customError, expression()).toNot(beNil())
 }
@@ -305,7 +305,7 @@ public func unwraps<T>(
     file: FileString = #file,
     line: UInt = #line,
     customError: Error? = nil,
-    _ expression: @autoclosure () -> sending (() throws -> sending T?)
+    _ expression: @autoclosure () -> (@Sendable () throws -> sending T?)
 ) throws -> T {
     try requires(file: file, line: line, customError: customError, expression()).toNot(beNil())
 }

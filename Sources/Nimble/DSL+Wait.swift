@@ -21,7 +21,7 @@ public class NMBWait: NSObject {
         timeout: TimeInterval,
         file: FileString = #file,
         line: UInt = #line,
-        action: sending @escaping (@escaping @Sendable () -> Void) -> Void) {
+        action: @escaping @Sendable (@escaping @Sendable () -> Void) -> Void) {
             // Convert TimeInterval to NimbleTimeInterval
             until(timeout: timeout.nimbleInterval, file: file, line: line, action: action)
     }
@@ -31,7 +31,7 @@ public class NMBWait: NSObject {
         timeout: NimbleTimeInterval,
         file: FileString = #file,
         line: UInt = #line,
-        action: sending @escaping (@escaping @Sendable () -> Void) -> Void) {
+        action: @escaping @Sendable (@escaping @Sendable () -> Void) -> Void) {
             return throwableUntil(timeout: timeout, file: file, line: line) { done in
                 action(done)
             }
@@ -42,9 +42,10 @@ public class NMBWait: NSObject {
         timeout: NimbleTimeInterval,
         file: FileString = #file,
         line: UInt = #line,
-        action: sending @escaping (@escaping @Sendable () -> Void) throws -> Void) {
+        action: @escaping @Sendable (@escaping @Sendable () -> Void) throws -> Void) {
             let awaiter = NimbleEnvironment.activeInstance.awaiter
             let leeway = timeout.divided
+            let location = SourceLocation(file: file, line: line)
             let result = awaiter.performBlock(file: file, line: line) { (done: @escaping @Sendable (ErrorResult) -> Void) throws -> Void in
                 DispatchQueue.main.async {
                     let capture = NMBExceptionCapture(
@@ -63,7 +64,9 @@ public class NMBWait: NSObject {
                         }
                     }
                 }
-            }.timeout(timeout, forcefullyAbortTimeout: leeway).wait("waitUntil(...)", file: file, line: line)
+            }
+                .timeout(timeout, forcefullyAbortTimeout: leeway)
+                .wait("waitUntil(...)", sourceLocation: location)
 
             switch result {
             case .incomplete: internalError("Reached .incomplete state for waitUntil(...).")
@@ -90,7 +93,7 @@ public class NMBWait: NSObject {
     public class func until(
         _ file: FileString = #file,
         line: UInt = #line,
-        action: sending @escaping (@escaping @Sendable () -> Void) -> Void) {
+        action: @escaping @Sendable (@escaping @Sendable () -> Void) -> Void) {
         until(timeout: .seconds(1), file: file, line: line, action: action)
     }
 #else
@@ -116,7 +119,12 @@ internal func blockedRunLoopErrorMessageFor(_ fnName: String, leeway: NimbleTime
 /// This function manages the main run loop (`NSRunLoop.mainRunLoop()`) while this function
 /// is executing. Any attempts to touch the run loop may cause non-deterministic behavior.
 @available(*, noasync, message: "the sync variant of `waitUntil` does not work in async contexts. Use the async variant as a drop-in replacement")
-public func waitUntil(timeout: NimbleTimeInterval = PollingDefaults.timeout, file: FileString = #file, line: UInt = #line, action: sending @escaping (@escaping @Sendable () -> Void) -> Void) {
+public func waitUntil(
+    timeout: NimbleTimeInterval = PollingDefaults.timeout,
+    file: FileString = #file,
+    line: UInt = #line,
+    action: @escaping @Sendable (@escaping @Sendable () -> Void) -> Void
+) {
     NMBWait.until(timeout: timeout, file: file, line: line, action: action)
 }
 

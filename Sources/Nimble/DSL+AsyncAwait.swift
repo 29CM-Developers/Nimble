@@ -87,8 +87,8 @@ public func expecta(file: FileString = #file, line: UInt = #line, _ expression: 
 ///
 /// @warning
 /// Unlike the synchronous version of this call, this does not support catching Objective-C exceptions.
-public func waitUntil(timeout: NimbleTimeInterval = PollingDefaults.timeout, file: FileString = #file, line: UInt = #line, action: sending @escaping (@escaping @Sendable () -> Void) async -> Void) async {
-    await throwableUntil(timeout: timeout) { done in
+public func waitUntil(timeout: NimbleTimeInterval = PollingDefaults.timeout, file: FileString = #file, line: UInt = #line, action: @escaping @Sendable (@escaping @Sendable () -> Void) async -> Void) async {
+    await throwableUntil(timeout: timeout, sourceLocation: SourceLocation(file: file, line: line)) { done in
         await action(done)
     }
 }
@@ -100,8 +100,8 @@ public func waitUntil(timeout: NimbleTimeInterval = PollingDefaults.timeout, fil
 ///
 /// @warning
 /// Unlike the synchronous version of this call, this does not support catching Objective-C exceptions.
-public func waitUntil(timeout: NimbleTimeInterval = PollingDefaults.timeout, file: FileString = #file, line: UInt = #line, action: sending @escaping (@escaping @Sendable () -> Void) -> Void) async {
-    await throwableUntil(timeout: timeout, file: file, line: line) { done in
+public func waitUntil(timeout: NimbleTimeInterval = PollingDefaults.timeout, file: FileString = #file, line: UInt = #line, action: @escaping @Sendable (@escaping @Sendable () -> Void) -> Void) async {
+    await throwableUntil(timeout: timeout, sourceLocation: SourceLocation(file: file, line: line)) { done in
         action(done)
     }
 }
@@ -113,14 +113,13 @@ private enum ErrorResult {
 
 private func throwableUntil(
     timeout: NimbleTimeInterval,
-    file: FileString = #file,
-    line: UInt = #line,
-    action: sending @escaping (@escaping @Sendable () -> Void) async throws -> Void) async {
+    sourceLocation: SourceLocation,
+    action: @escaping @Sendable (@escaping @Sendable () -> Void) async throws -> Void) async {
         let leeway = timeout.divided
         let result = await performBlock(
             timeoutInterval: timeout,
             leeway: leeway,
-            file: file, line: line) { @MainActor (done: @escaping @Sendable (ErrorResult) -> Void) async throws -> Void in
+            sourceLocation: sourceLocation) { @MainActor (done: @escaping @Sendable (ErrorResult) -> Void) async throws -> Void in
                 do {
                     try await action {
                         done(.none)
@@ -134,9 +133,9 @@ private func throwableUntil(
         case .incomplete: internalError("Reached .incomplete state for waitUntil(...).")
         case .blockedRunLoop:
             fail(blockedRunLoopErrorMessageFor("-waitUntil()", leeway: leeway),
-                 file: file, line: line)
+                 file: sourceLocation.file, line: sourceLocation.line)
         case .timedOut:
-            fail("Waited more than \(timeout.description)", file: file, line: line)
+            fail("Waited more than \(timeout.description)", file: sourceLocation.file, line: sourceLocation.line)
         case let .errorThrown(error):
             fail("Unexpected error thrown: \(error)")
         case .completed(.error(let error)):

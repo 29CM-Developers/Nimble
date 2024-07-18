@@ -2,7 +2,7 @@
 public func expect<T>(
     file: FileString = #file,
     line: UInt = #line,
-    _ expression: @autoclosure @escaping () throws -> sending T?
+    _ expression: @autoclosure @escaping @Sendable () throws -> sending T?
 ) -> SyncExpectation<T> {
     return SyncExpectation(
         expression: Expression(
@@ -15,7 +15,7 @@ public func expect<T>(
 public func expect<T>(
     file: FileString = #file,
     line: UInt = #line,
-    _ expression: @autoclosure () -> sending (() throws -> sending T)
+    _ expression: @autoclosure () -> (@Sendable () throws -> sending T)
 ) -> SyncExpectation<T> {
     return SyncExpectation(
         expression: Expression(
@@ -28,7 +28,7 @@ public func expect<T>(
 public func expect<T>(
     file: FileString = #file,
     line: UInt = #line,
-    _ expression: @autoclosure () -> sending (() throws -> sending T?)
+    _ expression: @autoclosure () -> (@Sendable () throws -> sending T?)
 ) -> SyncExpectation<T> {
     return SyncExpectation(
         expression: Expression(
@@ -41,7 +41,7 @@ public func expect<T>(
 public func expect(
     file: FileString = #file,
     line: UInt = #line,
-    _ expression: @autoclosure () -> sending (() throws -> sending Void)
+    _ expression: @autoclosure () -> (@Sendable () throws -> Void)
 ) -> SyncExpectation<Void> {
     return SyncExpectation(
         expression: Expression(
@@ -55,7 +55,7 @@ public func expect(
 public func expects<T>(
     file: FileString = #file,
     line: UInt = #line,
-    _ expression: @autoclosure @escaping () throws -> sending T?
+    _ expression: @autoclosure @escaping @Sendable () throws -> sending T?
 ) -> SyncExpectation<T> {
     return SyncExpectation(
         expression: Expression(
@@ -69,7 +69,7 @@ public func expects<T>(
 public func expects<T>(
     file: FileString = #file,
     line: UInt = #line,
-    _ expression: @autoclosure () -> sending (() throws -> sending T)
+    _ expression: @autoclosure () -> (@Sendable () throws -> sending T)
 ) -> SyncExpectation<T> {
     return SyncExpectation(
         expression: Expression(
@@ -83,7 +83,7 @@ public func expects<T>(
 public func expects<T>(
     file: FileString = #file,
     line: UInt = #line,
-    _ expression: @autoclosure () -> sending (() throws -> sending T?)
+    _ expression: @autoclosure () -> (@Sendable () throws -> sending T?)
 ) -> SyncExpectation<T> {
     return SyncExpectation(
         expression: Expression(
@@ -97,7 +97,7 @@ public func expects<T>(
 public func expects(
     file: FileString = #file,
     line: UInt = #line,
-    _ expression: @autoclosure () -> sending (() throws -> sending Void)
+    _ expression: @autoclosure () -> (@Sendable () throws -> Void)
 ) -> SyncExpectation<Void> {
     return SyncExpectation(
         expression: Expression(

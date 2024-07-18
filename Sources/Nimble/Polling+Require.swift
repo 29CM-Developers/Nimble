@@ -708,28 +708,28 @@ extension AsyncRequirement {
 /// Makes sure that the expression evaluates to a non-nil value, otherwise throw an error.
 /// As you can tell, this is a much less verbose equivalent to `require(expression).toEventuallyNot(beNil())`
 @discardableResult
-public func pollUnwrap<T>(file: FileString = #file, line: UInt = #line, _ expression: @autoclosure @escaping () throws -> T?) throws -> T {
+public func pollUnwrap<T>(file: FileString = #file, line: UInt = #line, _ expression: @autoclosure @escaping @Sendable () throws -> T?) throws -> T {
     try require(file: file, line: line, expression()).toEventuallyNot(beNil())
 }
 
 /// Makes sure that the expression evaluates to a non-nil value, otherwise throw an error.
 /// As you can tell, this is a much less verbose equivalent to `require(expression).toEventuallyNot(beNil())`
 @discardableResult
-public func pollUnwrap<T>(file: FileString = #file, line: UInt = #line, _ expression: @autoclosure () -> (() throws -> T?)) throws -> T {
+public func pollUnwrap<T>(file: FileString = #file, line: UInt = #line, _ expression: @autoclosure () -> (@Sendable () throws -> T?)) throws -> T {
     try require(file: file, line: line, expression()).toEventuallyNot(beNil())
 }
 
 /// Makes sure that the expression evaluates to a non-nil value, otherwise throw an error.
 /// As you can tell, this is a much less verbose equivalent to `require(expression).toEventuallyNot(beNil())`
 @discardableResult
-public func pollUnwraps<T>(file: FileString = #file, line: UInt = #line, _ expression: @autoclosure @escaping () throws -> T?) throws -> T {
+public func pollUnwraps<T>(file: FileString = #file, line: UInt = #line, _ expression: @autoclosure @escaping @Sendable () throws -> T?) throws -> T {
     try require(file: file, line: line, expression()).toEventuallyNot(beNil())
 }
 
 /// Makes sure that the expression evaluates to a non-nil value, otherwise throw an error.
 /// As you can tell, this is a much less verbose equivalent to `require(expression).toEventuallyNot(beNil())`
 @discardableResult
-public func pollUnwraps<T>(file: FileString = #file, line: UInt = #line, _ expression: @autoclosure () -> (() throws -> T?)) throws -> T {
+public func pollUnwraps<T>(file: FileString = #file, line: UInt = #line, _ expression: @autoclosure () -> (@Sendable () throws -> T?)) throws -> T {
     try require(file: file, line: line, expression()).toEventuallyNot(beNil())
 }
 
